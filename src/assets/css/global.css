@@ -1,0 +1,41 @@
+/* global.css */
+
+/* Réinitialisation des marges pour le body */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif; /* Police par défaut */
+  background-color: #f5f5f5; /* Couleur de fond de l'application */
+  color: #333; /* Couleur par défaut du texte */
+}
+
+/* Titres */
+h1, h2, h3 {
+  color: #333; /* Couleur des titres */
+}
+
+/* Liens globaux */
+a {
+  text-decoration: none; /* Suppression du soulignement par défaut */
+  color: #b98342; /* Couleur des liens */
+}
+
+a:hover {
+  color: #ffcc00; /* Couleur au survol des liens */
+}
+
+/* Footer global */
+footer {
+  background-color: #333; /* Fond du footer */
+  color: #fff; /* Texte du footer */
+  text-align: center;
+  padding: 1rem 0; /* Espacement */
+  position: relative;
+  width: 100%; /* Prend toute la largeur */
+  bottom: 0;
+}
+
+/* Alignement de texte centré pour la classe hero utilisée dans les sections importantes */
+.hero {
+  text-align: center;
+  padding: 50px 0;
+}
