@@ -24,7 +24,7 @@ export default {
       this.$emit('remove-from-cart');
     },
     decreaseQuantity() {
-      if (this.quantity > 1) {
+      if (this.quantity > 0) {
         this.$emit('update-quantity', -1); 
       } 
     },

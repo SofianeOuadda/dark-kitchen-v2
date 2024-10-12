@@ -32,17 +32,19 @@ export default {
   },
   props: {
     cartItems: Array,
-    removeFromCart: Function
   },
   methods: {
     updateQuantity(item, change) {
-      const cartItem = this.cartItems.find(cartItem => cartItem.name === item.name);
+      const cartItem = this.cartItems.find(cartItem => cartItem.name === item.name && cartItem.price === item.price);
       if (cartItem) {
         cartItem.quantity += change;
         if (cartItem.quantity <= 0) {
           this.removeFromCart(cartItem);
         }
       }
+    },
+    removeFromCart(item) {
+      this.$emit('remove-from-cart', item);
     },
     calculateTotal() {
       return this.cartItems.reduce((total, item) => {

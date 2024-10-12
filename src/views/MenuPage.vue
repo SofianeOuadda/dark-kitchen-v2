@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       menuItems: [
-        { name: 'Nasi Goreng', description: 'Delicious Fried Rice', price: 9, image: require('@/assets/images/Nasi-Goreng-receta.jpg') },
+        { name: 'Nasi Goreng', description: 'Delicious Fried Rice', price: 100, image: require('@/assets/images/Nasi-Goreng-receta.jpg') },
         { name: 'Mie Goreng', description: 'Delicious Fried Noodle', price: 10, image: require('@/assets/images/mie_goreng.jpg') },
         { name: 'Nasi Goreng', description: 'Delicious Fried Rice', price: 9, image: require('@/assets/images/Nasi-Goreng-receta.jpg') },
         { name: 'Mie Goreng', description: 'Delicious Fried Noodle', price: 10, image: require('@/assets/images/mie_goreng.jpg') },

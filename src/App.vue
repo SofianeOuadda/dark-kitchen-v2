@@ -3,7 +3,11 @@
     <AppHeader :cartItems="cart" />
 
     <main class="main-content">
-      <router-view :cartItems="cart" @add-to-cart="addToCart" />
+      <router-view 
+        :cartItems="cart" 
+        @add-to-cart="addToCart" 
+        @remove-from-cart="removeFromCart"
+      />
     </main>
 
     <AppFooter />
@@ -27,12 +31,16 @@ export default {
   },
   methods: {
     addToCart(item) {
-      const existingItem = this.cart.find(cartItem => cartItem.name === item.name);
+      const existingItem = this.cart.find(cartItem => cartItem.name === item.name && cartItem.price === item.price);
       if (existingItem) {
         existingItem.quantity++;
       } else {
         this.cart.push({ ...item, quantity: 1 });
       }
+    },
+
+    removeFromCart(item) {
+      this.cart = this.cart.filter(cartItem => cartItem.name !== item.name || cartItem.price !== item.price);
     }
   }
 }
