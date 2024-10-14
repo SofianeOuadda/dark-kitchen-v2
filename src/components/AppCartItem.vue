@@ -7,7 +7,7 @@
       <button @click="decreaseQuantity">-</button>
       <button @click="increaseQuantity">+</button>
     </div>
-    <button @click="removeFromCart">Remove</button>
+    <button @click="removeItemFromCart">Remove</button>
   </div>
 </template>
 
