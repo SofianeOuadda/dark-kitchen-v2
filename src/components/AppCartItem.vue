@@ -19,8 +19,9 @@ export default {
     price: Number,
     quantity: Number
   },
+  
   methods: {
-    removeFromCart() {
+    removeItemFromCart() {
       this.$emit('remove-from-cart');
     },
     decreaseQuantity() {

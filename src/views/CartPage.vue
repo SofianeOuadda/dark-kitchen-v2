@@ -7,7 +7,7 @@
         :name="item.name" 
         :price="item.price" 
         :quantity="item.quantity"
-        @remove-from-cart="removeFromCart(item)" 
+        @remove-from-cart="() => removeFromCart(item)" 
         @update-quantity="updateQuantity(item, $event)" 
       />
     </div>
@@ -34,6 +34,9 @@ export default {
     cartItems: Array,
   },
   methods: {
+    removeFromCart(item) {
+      this.$emit('remove-from-cart', item);
+    },
     updateQuantity(item, change) {
       const cartItem = this.cartItems.find(cartItem => cartItem.name === item.name && cartItem.price === item.price);
       if (cartItem) {

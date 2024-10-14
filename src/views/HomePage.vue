@@ -2,21 +2,22 @@
   <div class="home-content">
     <section class="hero">
       <div class="hero-content">
-        <h1>Bienvenue chez Dark Kitchen</h1>
-        <p>Découvrez nos plats délicieux, préparés avec soin pour une expérience gastronomique unique.</p>
-        <router-link to="/menu" class="btn-primary">Voir les menus</router-link>
+        <h1>Welcome to S&T Goreng</h1>
+        <p>Experience the flavors of Indonesia with Sofiane & Thomas! <br> Delicious and freshly made Nasi Goreng and Mie Goreng, straight from the streets of Asia to your doorstep! <br><br>ORDER NOW!</p>
+        <router-link to="/menu" class="btn-primary">View to menus</router-link>
       </div>
     </section>
 
     <section class="featured-dish">
       <div class="container">
-        <h2>Plat du jour</h2>
+        <h2>Daily Special</h2>
         <div class="dish">
           <img src="@/assets/images/Nasi-Goreng-receta.jpg" alt="Plat du jour">
           <div class="dish-details">
-            <h3>Nasi Goreng</h3>
-            <p>Riz sauté aux légumes façon Algérienne.</p>
-            <router-link to="/cart" class="btn-secondary">Ajouter au panier</router-link>
+            <h3>Egg Nasi Goreng</h3>
+            <p>Delicious Vegetable Fried Rice with Fried Egg.</p>
+            <!-- Lors du clic, ajouter au panier -->
+            <button @click="addToCart" class="btn-secondary">Ajouter au panier</button>
           </div>
         </div>
       </div>
@@ -26,7 +27,25 @@
 
 <script>
 export default {
-  name: 'HomePage'
+  name: 'HomePage',
+  props: {
+    cartItems: Array // Reçoit les articles du panier de l'élément parent
+  },
+  methods: {
+    addToCart() {
+      const item = {
+        name: 'Egg Nasi Goreng',
+        description: 'Delicious Vegetable Fried Rice with Fried Egg.',
+        price: 9,
+        image: require('@/assets/images/Nasi-Goreng-receta.jpg')
+      };
+      // Emettre un événement vers l'élément parent pour ajouter au panier
+      this.$emit('add-to-cart', item);
+
+      // Après l'ajout au panier, rediriger vers la page /cart
+      this.$router.push('/cart');
+    }
+  }
 }
 </script>
 
