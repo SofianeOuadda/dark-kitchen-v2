@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors'); // Importer le middleware CORS
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
+const productRoutes = require('./routes/products'); // Importer les routes produits
 
 const app = express();
 
@@ -26,6 +27,7 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes); // Monter les routes produits
 
 // Route de test
 app.get('/', (req, res) => {

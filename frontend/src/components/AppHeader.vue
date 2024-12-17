@@ -22,6 +22,9 @@
           <router-link to="/cart" @click="closeDropdown">Cart</router-link>
           <span v-if="cartCount > 0" class="dropdown-cart-count">{{ cartCount }}</span>
         </li>
+        <li v-if="isAuthenticated">
+          <span>Bienvenue, {{ user.name }}</span>
+        </li>
       </ul>
     </nav>
 

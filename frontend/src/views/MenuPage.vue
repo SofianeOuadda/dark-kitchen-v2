@@ -1,42 +1,24 @@
 <template>
-  <div>
-    <!-- Tableau pour Nasi Goreng -->
-    <div class="menu-section">
-      <h2>Nasi Goreng</h2>
-      <div class="menu-list">
-        <AppMenuItem 
-          v-for="(item, index) in nasiGorengItems" 
-          :key="index" 
-          :name="item.name" 
-          :description="item.description" 
-          :price="item.price" 
-          :image="item.image"
-          @add-to-cart="addToCart(item)"
-        />
-      </div>
-    </div>
-
-    <!-- Tableau pour Mie Goreng -->
-    <div class="menu-section">
-      <h2>Mie Goreng</h2>
-      <div class="menu-list">
-        <AppMenuItem 
-          v-for="(item, index) in mieGorengItems" 
-          :key="index" 
-          :name="item.name" 
-          :description="item.description" 
-          :price="item.price" 
-          :image="item.image"
-          @add-to-cart="addToCart(item)"
-        />
-      </div>
+  <div class="menu-page">
+    <h2>Notre Menu</h2>
+    <div v-if="loading" class="loader">Chargement des produits...</div>
+    <div v-else class="products-grid">
+      <AppMenuItem 
+        v-for="product in products" 
+        :key="product._id" 
+        :name="product.name" 
+        :description="product.description" 
+        :price="product.price" 
+        :image="product.image"
+        @add-to-cart="addToCart(product)"
+      />
     </div>
   </div>
 </template>
 
 <script>
-
 import AppMenuItem from '@/components/AppMenuItem.vue';
+import api from '@/services/api';
 
 export default {
   name: 'MenuPage',
@@ -48,49 +30,99 @@ export default {
   },
   data() {
     return {
-      nasiGorengItems: [
-        { name: 'Egg Nasi Goreng', description: 'Delicious Fried Rice with fried egg', price: 9, image: require('@/assets/images/Nasi-Goreng-receta.jpg') },
-        { name: 'Chicken Nasi Goreng', description: 'Delicious Fried Rice with chicken', price: 10, image: require('@/assets/images/nasi-goreng-poulet.jpeg') },
-        { name: 'Sea food Nasi Goreng', description: 'Delicious Fried Rice with fish, calamari and prawns', price: 11, image: require('@/assets/images/nasi-goreng-seafood.jpg') }
-      ],
-      mieGorengItems: [
-        { name: 'Egg Mie Goreng', description: 'Delicious Fried Noodles with fried egg', price: 9, image: require('@/assets/images/miegoreng-egg.jpg') },
-        { name: 'Chicken Mie Goreng', description: 'Delicious Fried Noodles with chicken', price: 10, image: require('@/assets/images/mie_goreng.jpg') },
-        { name: 'Sea food Mie Goreng', description: 'Delicious Fried Noodles with fish, calamari and prawns', price: 11, image: require('@/assets/images/miegoreng-crevettes.jpg') }
-      ]
+      products: [],
+      loading: false,
     };
   },
   methods: {
+    async fetchProducts() {
+      this.loading = true;
+      try {
+        const response = await api.get('/products');
+        this.products = response.data;
+      } catch (error) {
+        console.error(error);
+        alert('Erreur lors du chargement des produits');
+      } finally {
+        this.loading = false;
+      }
+    },
     addToCart(item) {
       this.$emit('add-to-cart', item);
-    }
-  }
-}
+    },
+    formatPrice(price) {
+      return `${price} €`;
+    },
+  },
+  created() {
+    this.fetchProducts();
+  },
+};
 </script>
 
 <style scoped>
-.menu-section {
-  margin-bottom: 4rem; /* Espace entre les deux sections */
-}
-
-.menu-section h2 {
+.menu-page {
+  padding: 20px;
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
 }
 
-.menu-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Garde la disposition en grille */
-  gap: 2rem;
-  padding: 2rem;
-  background-color: #f9f9f9;
+.loader {
+  font-size: 1.2rem;
+  color: #555;
 }
 
-.menu-item img {
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-card {
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
   width: 100%;
-  height: 200px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 5px;
+}
+
+.product-name {
+  font-size: 1.2rem;
+  margin: 10px 0 5px 0;
+  color: #333;
+}
+
+.product-description {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.product-price {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #b98342;
+  margin: 10px 0;
+}
+
+.add-to-cart-btn {
+  background-color: #b98342;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #ff7f00;
 }
 </style>

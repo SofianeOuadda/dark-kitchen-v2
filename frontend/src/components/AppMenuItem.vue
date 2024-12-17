@@ -3,8 +3,8 @@
     <img :src="image" alt="Menu Item" class="menu-item-image" />
     <h3>{{ name }}</h3>
     <p>{{ description }}</p>
-    <p><strong>{{ price }} €</strong></p>
-    <button @click="addToCart">Add to Cart</button>
+    <p><strong>{{ formatPrice(price) }}</strong></p>
+    <button @click="addToCart">Ajouter au panier</button>
   </div>
 </template>
 
@@ -12,14 +12,29 @@
 export default {
   name: 'AppMenuItem',
   props: {
-    name: String,
-    description: String,
-    price: String,
-    image: String
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    }
   },
   methods: {
     addToCart() {
       this.$emit('add-to-cart');
+    },
+    formatPrice(price) {
+      return `${price} €`;
     }
   }
 }
@@ -40,8 +55,8 @@ export default {
 
 .menu-item-image {
   width: 100%;
-  height: auto;
-  margin-bottom: 1rem;
+  height: 200px;
+  object-fit: cover;
   border-radius: 10px;
 }
 
@@ -51,6 +66,8 @@ button {
   border: none;
   padding: 0.75rem 1.25rem;
   border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 button:hover {
   background-color: #ffb347;
