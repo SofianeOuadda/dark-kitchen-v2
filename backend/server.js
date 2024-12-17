@@ -1,32 +1,26 @@
+// backend/server.js
+require('dotenv').config();  // Pour lire les variables depuis .env
 const express = require('express');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const cors = require('cors');
-
-dotenv.config();
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/auth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Middleware pour parser les JSON dans les requêtes
 app.use(express.json());
 
-// Connexion à MongoDB via Mongoose
-mongoose.connect(process.env.DB_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch(err => {
-    console.log("Error connecting to MongoDB: ", err);
-  });
+// Connexion à la base de données
+connectDB();
 
 // Routes
+app.use('/api/auth', authRoutes);
+
+// Route de test
 app.get('/', (req, res) => {
-    res.send('Backend is running!');
+  res.send('API Running');
 });
 
-// Start server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
