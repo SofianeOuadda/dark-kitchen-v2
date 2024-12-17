@@ -5,7 +5,9 @@
         <h1>Dark Kitchen</h1>
       </div>
       <div class="right-section">
-        <button class="login-btn" @click="toggleLoginModal">Login</button>
+        <span v-if="isAuthenticated" class="welcome-message">Bonjour, {{ user.name }}</span>
+        <button v-if="!isAuthenticated" class="login-btn" @click="toggleLoginModal">Login</button>
+        <button v-else class="logout-btn" @click="logout">Logout</button>
         <div class="menu-icon" @click="toggleDropdown">
           <span class="bar"></span>
           <span class="bar"></span>
@@ -42,6 +44,7 @@
 <script>
 import LoginModal from './LoginModal.vue'
 import SignupModal from './SignupModal.vue'
+import api from '../services/api'
 
 export default {
   name: "AppHeader",
@@ -60,23 +63,16 @@ export default {
       isDropdownOpen: false,
       isLoginModalOpen: false,
       isSignupModalOpen: false,
-      loginForm: {
-        email: "",
-        password: "",
-      },
-      signupForm: {
-        nom: "",
-        prenom: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      },
+      user: null, // Stocke les informations de l'utilisateur
     };
   },
   computed: {
     cartCount() {
       return this.cartItems.reduce((count, item) => count + item.quantity, 0);
     },
+    isAuthenticated() {
+      return !!this.user;
+    }
   },
   methods: {
     toggleDropdown() {
@@ -98,24 +94,68 @@ export default {
     closeSignupModal() {
       this.isSignupModalOpen = false;
     },
-    handleLogin({ email}) {
-      alert(`Connecté avec ${email}`);
-      this.closeLoginModal();
-    },
-    handleSignup({ email, password, confirmPassword }) {
-      if (password !== confirmPassword) {
-        alert("Les mots de passe ne correspondent pas");
-        return;
-      }
-      alert(`Inscription réussie avec ${email}`);
-      this.closeSignupModal();
-    },
     openLoginModal() {
       this.isSignupModalOpen = false;
       this.isLoginModalOpen = true;
     },
+    async handleLogin({ email, password }) {
+      try {
+        const response = await api.post('/auth/login', { email, password });
+        const { token, user } = response.data;
+        // Stocker le token dans localStorage
+        localStorage.setItem('token', token);
+        // Mettre à jour l'état utilisateur
+        this.user = user;
+        alert(`Connecté avec ${email}`);
+        this.closeLoginModal();
+      } catch (error) {
+        console.error(error);
+        alert(error.response?.data?.message || 'Erreur lors de la connexion');
+      }
+    },
+    async handleSignup({ nom, email, password, confirmPassword }) {
+      if (password !== confirmPassword) {
+        alert("Les mots de passe ne correspondent pas");
+        return;
+      }
+      try {
+        const name = `${nom}`; // Construire le nom complet
+        const response = await api.post('/auth/register', { name, email, password });
+        const { token, user } = response.data;
+        // Stocker le token dans localStorage
+        localStorage.setItem('token', token);
+        // Mettre à jour l'état utilisateur
+        this.user = user;
+        alert(`Inscription réussie avec ${email}`);
+        this.closeSignupModal();
+      } catch (error) {
+        console.error(error);
+        alert(error.response?.data?.message || 'Erreur lors de l\'inscription');
+      }
+    },
+    logout() {
+      localStorage.removeItem('token');
+      this.user = null;
+      alert('Déconnecté avec succès');
+    },
+    async fetchUserProfile() {
+      try {
+        const response = await api.get('/auth/profile');
+        this.user = response.data;
+      } catch (error) {
+        console.error(error);
+        // Token invalide ou expiré, déconnecter l'utilisateur
+        this.logout();
+      }
+    }
   },
-};
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.fetchUserProfile();
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -142,7 +182,13 @@ export default {
   gap: 15px;
 }
 
-.login-btn {
+.welcome-message {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.login-btn, .logout-btn {
   background-color: #b98342;
   color: #fff;
   border: none;
@@ -156,7 +202,7 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.login-btn:hover {
+.login-btn:hover, .logout-btn:hover {
   background-color: #ff7f00;
 }
 
