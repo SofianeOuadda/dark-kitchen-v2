@@ -34,7 +34,6 @@ export default {
     };
   },
   created() {
-    // Charger le panier depuis localStorage au démarrage
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
@@ -48,10 +47,9 @@ export default {
   watch: {
     cart: {
       handler(newCart) {
-        // Mettre à jour localStorage chaque fois que le panier change
         localStorage.setItem('cart', JSON.stringify(newCart));
       },
-      deep: true // Pour surveiller les changements dans les objets du tableau
+      deep: true 
     }
   },
   methods: {
@@ -62,12 +60,10 @@ export default {
       } else {
         this.cart.push({ ...item, quantity: 1 });
       }
-      // localStorage sera mis à jour automatiquement via le watcher
     },
 
     removeFromCart(item) {
       this.cart = this.cart.filter(cartItem => cartItem._id !== item._id);
-      // localStorage sera mis à jour automatiquement via le watcher
     }
   }
 }

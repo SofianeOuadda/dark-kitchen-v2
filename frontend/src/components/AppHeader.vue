@@ -66,7 +66,7 @@ export default {
       isDropdownOpen: false,
       isLoginModalOpen: false,
       isSignupModalOpen: false,
-      user: null, // Stocke les informations de l'utilisateur
+      user: null, 
     };
   },
   computed: {
@@ -105,9 +105,7 @@ export default {
       try {
         const response = await api.post('/auth/login', { email, password });
         const { token, user } = response.data;
-        // Stocker le token dans localStorage
         localStorage.setItem('token', token);
-        // Mettre à jour l'état utilisateur
         this.user = user;
         alert(`Connecté avec ${email}`);
         this.closeLoginModal();
@@ -122,12 +120,10 @@ export default {
         return;
       }
       try {
-        const name = `${nom}`; // Construire le nom complet
+        const name = `${nom}`; 
         const response = await api.post('/auth/register', { name, email, password });
         const { token, user } = response.data;
-        // Stocker le token dans localStorage
         localStorage.setItem('token', token);
-        // Mettre à jour l'état utilisateur
         this.user = user;
         alert(`Inscription réussie avec ${email}`);
         this.closeSignupModal();
@@ -147,7 +143,6 @@ export default {
         this.user = response.data;
       } catch (error) {
         console.error(error);
-        // Token invalide ou expiré, déconnecter l'utilisateur
         this.logout();
       }
     }

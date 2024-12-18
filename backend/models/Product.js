@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Schéma pour un Plat
 const productSchema = new mongoose.Schema({
   name: {
     type: String,

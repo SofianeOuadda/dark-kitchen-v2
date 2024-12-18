@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style scoped>
-/* Styles existants */
+
 .modal-overlay {
   position: fixed;
   top: 0;

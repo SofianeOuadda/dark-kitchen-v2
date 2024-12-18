@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Schéma pour une Commande
 const orderSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,

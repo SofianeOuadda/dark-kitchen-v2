@@ -1,10 +1,9 @@
-// backend/routes/products.js
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
-const auth = require('../middleware/auth'); // Middleware d'authentification (si nécessaire)
+const auth = require('../middleware/auth'); 
 
-// **GET /api/products** - Récupérer tous les produits
+// Récupère les produits
 router.get('/', async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -15,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// **GET /api/products/:id** - Récupérer un produit par ID
+// Récupère un produit par ID
 router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -29,17 +28,15 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// **POST /api/products** - Créer un nouveau produit (protégé par authentification)
+// Création d'un nouveau produit
 router.post('/', auth, async (req, res) => {
   const { name, description, price, image, category, ingredients, available } = req.body;
   try {
-    // Vérifier si le produit existe déjà
     let product = await Product.findOne({ name });
     if (product) {
       return res.status(400).json({ message: 'Un produit avec ce nom existe déjà.' });
     }
 
-    // Créer un nouveau produit
     product = new Product({
       name,
       description,
@@ -59,7 +56,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// **PUT /api/products/:id** - Mettre à jour un produit existant (protégé par authentification)
+// Mise à jour d'un produit existant 
 router.put('/:id', auth, async (req, res) => {
   const { name, description, price, image, category, ingredients, available } = req.body;
   try {
@@ -68,7 +65,6 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(404).json({ message: 'Produit non trouvé.' });
     }
 
-    // Mettre à jour les champs du produit
     product.name = name || product.name;
     product.description = description || product.description;
     product.price = price !== undefined ? price : product.price;
@@ -86,7 +82,7 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
-// **DELETE /api/products/:id** - Supprimer un produit (protégé par authentification)
+// Suppression d'un produit
 router.delete('/:id', auth, async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);

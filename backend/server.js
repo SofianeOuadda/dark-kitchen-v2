@@ -1,33 +1,30 @@
-// backend/server.js
+
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors'); // Importer le middleware CORS
 const connectDB = require('./config/db');
+const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const productRoutes = require('./routes/products'); // Importer les routes produits
-
+const productRoutes = require('./routes/products'); 
 const app = express();
 
 // Configurer les options CORS
 const corsOptions = {
-  origin: 'http://localhost:8080', // Autoriser uniquement cette origine
+  origin: 'http://localhost:8080', 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // Si vous souhaitez envoyer des cookies ou des en-têtes d'authentification
+  credentials: true, // Pour envoyer des cookies ou des en-têtes d'authentification
 };
 
-// Utiliser le middleware CORS avec les options définies
+
 app.use(cors(corsOptions));
 
-// Middleware pour parser les JSON
 app.use(express.json());
 
 // Connexion à la base de données
 connectDB();
 
-// Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes); // Monter les routes produits
+app.use('/api/products', productRoutes); 
 
 // Route de test
 app.get('/', (req, res) => {

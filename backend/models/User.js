@@ -1,8 +1,7 @@
-// backend/models/User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs'); // Pour hasher les mots de passe
+const bcrypt = require('bcryptjs'); // Pour hashage des mots de passe
 
-// Schéma pour un utilisateur
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,7 +11,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/, // Validité de l'email
+    match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/, 
   },
   password: {
     type: String,
@@ -24,20 +23,18 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Hashage du mot de passe avant de le sauvegarder dans la base de données
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next(); // Si le mot de passe n'est pas modifié, on passe à l'étape suivante
+  if (!this.isModified('password')) return next(); 
 
-  const salt = await bcrypt.genSalt(10); // Génération du "sel"
-  this.password = await bcrypt.hash(this.password, salt); // Hashage du mot de passe
+  const salt = await bcrypt.genSalt(10); 
+  this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-// Méthode pour comparer les mots de passe
+
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password); // Compare le mot de passe saisi avec celui hashé
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Création du modèle Mongoose pour l'utilisateur
 const User = mongoose.model('User', userSchema);
 module.exports = User;

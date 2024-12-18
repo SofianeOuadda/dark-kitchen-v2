@@ -2,21 +2,43 @@
   <div class="menu-page">
     <h2>Notre Menu</h2>
     <div v-if="loading" class="loader">Chargement des produits...</div>
-    <div v-else class="products-grid">
-      <AppMenuItem 
-        v-for="product in products" 
-        :key="product._id" 
-        :name="product.name" 
-        :description="product.description" 
-        :price="product.price" 
-        :image="product.image"
-        @add-to-cart="addToCart(product)"
-      />
+    <div v-else>
+      <div class="menu-section">
+        <h3>Nos recettes de Nasi Goreng</h3>
+        <div class="products-grid">
+          <AppMenuItem 
+            v-for="product in nasiGorengItems" 
+            :key="product._id" 
+            :name="product.name" 
+            :description="product.description" 
+            :price="product.price" 
+            :image="product.image"
+            @add-to-cart="addToCart(product)"
+          />
+        </div>
+      </div>
+
+      <div class="menu-section">
+        <h3>Nos recettes de Mie Goreng</h3>
+        <div class="products-grid">
+          <AppMenuItem 
+            v-for="product in mieGorengItems" 
+            :key="product._id" 
+            :name="product.name" 
+            :description="product.description" 
+            :price="product.price" 
+            :image="product.image"
+            @add-to-cart="addToCart(product)"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
+
 <script>
+
 import AppMenuItem from '@/components/AppMenuItem.vue';
 import api from '@/services/api';
 
@@ -30,12 +52,28 @@ export default {
   },
   data() {
     return {
+
       products: [],
       loading: false,
+
     };
+  },
+  computed: {
+    
+    nasiGorengItems() {
+      return this.products.filter(item => item.category === 'Nasi Goreng');
+    },
+    
+    mieGorengItems() {
+      return this.products.filter(item => item.category === 'Mie Goreng');
+    }
+  },
+  mounted() {
+    this.fetchProducts(); 
   },
   methods: {
     async fetchProducts() {
+
       this.loading = true;
       try {
         const response = await api.get('/products');
@@ -45,6 +83,7 @@ export default {
         alert('Erreur lors du chargement des produits');
       } finally {
         this.loading = false;
+
       }
     },
     addToCart(item) {
@@ -57,13 +96,23 @@ export default {
   created() {
     this.fetchProducts();
   },
+
 };
+
 </script>
 
 <style scoped>
 .menu-page {
   padding: 20px;
   text-align: center;
+}
+
+.menu-page h2 {
+  font-size: 2.5rem; 
+  font-weight: bold;
+  color: #b98342; 
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2rem;
 }
 
 .loader {
@@ -76,6 +125,7 @@ export default {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  align-items: stretch;
 }
 
 .product-card {
@@ -84,6 +134,7 @@ export default {
   padding: 15px;
   width: 250px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: auto;
 }
 
 .product-image {
@@ -97,11 +148,6 @@ export default {
   font-size: 1.2rem;
   margin: 10px 0 5px 0;
   color: #333;
-}
-
-.product-description {
-  font-size: 0.9rem;
-  color: #666;
 }
 
 .product-price {
@@ -124,5 +170,19 @@ export default {
 
 .add-to-cart-btn:hover {
   background-color: #ff7f00;
+}
+
+.menu-section {
+  margin-bottom: 40px;
+}
+
+.menu-section h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333; 
+  border-bottom: 2px solid #333; 
+  display: inline-block; 
+  margin: 2rem 0 1rem 0; 
+  padding-bottom: 0.5rem;
 }
 </style>

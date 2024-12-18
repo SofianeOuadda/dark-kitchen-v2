@@ -3,7 +3,7 @@
     <section class="hero">
       <div class="hero-content">
         <h1>Welcome to S&T Goreng</h1>
-        <p>Experience the flavors of Indonesia with Sofiane & Thomas! <br> Delicious and freshly made Nasi Goreng and Mie Goreng, straight from the streets of Asia to your doorstep! <br><br>ORDER NOW!</p>
+        <p>Experience the flavors of Indonesia with Sofiane & Thomas! <br> Delicious and freshly made Nasi and Mie Goreng, straight from the streets of Asia to your doorstep! <br><br>ORDER NOW!</p>
         <router-link to="/menu" class="btn-primary">View to menus</router-link>
       </div>
     </section>
@@ -16,7 +16,6 @@
           <div class="dish-details">
             <h3>Egg Nasi Goreng</h3>
             <p>Delicious Vegetable Fried Rice with Fried Egg.</p>
-            <!-- Lors du clic, ajouter au panier -->
             <button @click="addToCart" class="btn-secondary">Ajouter au panier</button>
           </div>
         </div>
@@ -29,7 +28,7 @@
 export default {
   name: 'HomePage',
   props: {
-    cartItems: Array // Reçoit les articles du panier de l'élément parent
+    cartItems: Array 
   },
   methods: {
     addToCart() {
@@ -39,10 +38,10 @@ export default {
         price: 9,
         image: require('@/assets/images/Nasi-Goreng-receta.jpg')
       };
-      // Emettre un événement vers l'élément parent pour ajouter au panier
+     
       this.$emit('add-to-cart', item);
 
-      // Après l'ajout au panier, rediriger vers la page /cart
+      
       this.$router.push('/cart');
     }
   }
@@ -93,7 +92,6 @@ export default {
   background-color: #ffcc00;
 }
 
-/* Style pour la section Plat du jour */
 .featured-dish {
   padding: 2rem 0;
   text-align: center;
